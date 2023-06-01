@@ -1,4 +1,3 @@
-/* Images created by: https://unsplash.com/@pawel_czerwinski */
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Kaushan+Script&family=League+Spartan:wght@400;700&family=Nunito&family=Oswald&family=Poppins:wght@400;700&display=swap");
 html {
   box-sizing: border-box;
@@ -17,10 +16,8 @@ body {
 /* menue icon */
 #showListButton {
   position: absolute;
-  /*  */
   top: 0;
   right: 0;
-  /*  */
   background-color: #333;
   color: #fff;
   border: none;
@@ -49,6 +46,11 @@ body {
 
 #surasList li {
   padding: 10px;
+  text-align: center;
+  border: solid;
+  border-color: #c9ced3;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .hidden {
@@ -151,126 +153,37 @@ h3 {
   top: 3px;
 }
 
-/* Media Query: iPhone (Vertical) */
-@media screen and (max-width: 376px) {
-  .img-container {
-    left: 29px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    font-size: 15px;
-  }
-
-  .player-controls {
-    top: -10px;
-    left: 100px;
-  }
-}
 /* Query */
-/* Mobile Styles */
-@media screen and (max-width: 576px) {
-  body {
-    font-size: 10px;
-  }
 
-  #surasContainer {
-    margin-top: 30px;
-  }
-
-  #surasList {
-    width: 150px;
-  }
-
+/* Phone query */
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .player-container {
-    height: 400px;
     width: 300px;
   }
-
   .img-container {
-    height: 200px;
-    width: 200px;
-    top: -30px;
-    left: 50px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    font-size: 16px;
-  }
-
-  .progress-container {
-    margin: 20px 10px;
-  }
-
-  .duration-wrapper {
-    top: -15px;
-  }
-
-  .player-controls {
-    top: -10px;
-    left: 90px;
-    width: 150px;
-  }
-}
-
-/* Tablet Styles */
-@media screen and (min-width: 577px) and (max-width: 768px) {
-  body {
-    font-size: 14px;
-  }
-
-  .player-container {
-    height: 450px;
-    width: 350px;
-  }
-
-  .img-container {
-    height: 250px;
-    width: 250px;
-    top: -40px;
-    left: 75px;
-  }
-
-  .player-controls {
-    top: -10px;
-    left: 105px;
-    width: 180px;
-  }
-}
-
-/* Desktop Styles */
-@media screen and (min-width: 769px) {
-  body {
-    font-size: 12px;
-  }
-
-  .player-container {
-    height: 500px;
-    width: 400px;
-  }
-
-  .img-container {
-    height: 300px;
-    width: 300px;
+    left: 35px;
+    position: relative;
+    height: 230px;
+    width: 230px;
     top: -50px;
-    left: 50px;
+    /* left: 50px; */
   }
-
+  .img-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 5px 30px 5px rgba(0, 0, 0, 0.5);
+  }
+  .player-container {
+    height: 450px;
+  }
   .player-controls {
-    top: -15px;
-    left: 120px;
-    width: 200px;
+    left: 85px;
   }
 }
-/* Mobile Styles */
-@media screen and (max-width: 375px) {
+
+@media (max-width: 320px) {
   body {
     font-size: 10px;
   }
@@ -317,35 +230,3 @@ h3 {
     width: 150px;
   }
 }
-
-/* Landscape Phone Styles */
-@media screen and (min-width: 376px) and (max-width: 568px) {
-  body {
-    font-size: 12px;
-  }
-
-  .player-container {
-    height: 450px;
-    width: 350px;
-  }
-
-  .img-container {
-    height: 250px;
-    width: 250px;
-    top: -40px;
-    left: 75px;
-  }
-
-  .player-controls {
-    top: -10px;
-    left: 105px;
-    width: 180px;
-  }
-}
-/* 
-
-#surasContainer:active {
-  .player-container {
-    display: none;
-  }
-} */

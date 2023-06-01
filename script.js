@@ -6,14 +6,16 @@ const audio = document.querySelector("audio");
 const progressContainer = document.getElementById("progress-container");
 const durationEl = document.getElementById("duration");
 const currentTimeEl = document.getElementById("current-time");
+const playerContainer = document.querySelector(".player-container");
 
 const progress = document.getElementById("progress");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
+const mediaQuery = window.matchMedia(
+  "(min-width: 320px) and (max-width: 850px)"
+);
 
-// music
-//Test starts
 const suras = [
   { name: "Al-Fatiha", number: 1 },
   { name: "Al-Baqara", number: 2 },
@@ -130,7 +132,6 @@ const suras = [
   { name: "Al-Falaq", number: 113 },
   { name: "An-Nas", number: 114 },
 ];
-console.log(suras.length);
 let surahName;
 let sheikhName;
 
@@ -151,18 +152,26 @@ const getSurah = async function (surah) {
   );
   res = await data.json();
 
-  console.log(res);
   const ayatUrl = res.audio_file.audio_url;
 
-  console.log(ayatUrl);
   loadSong(ayatUrl);
+};
+const clickedOnSurah = function () {
+  console.log("hello");
+  playerContainer.classList.remove("hidden");
+  surasContainer.classList.add("hidden");
 };
 
 const showListButton = document.getElementById("showListButton");
 const surasContainer = document.getElementById("surasContainer");
 const surasList = document.getElementById("surasList");
 
-showListButton.addEventListener("click", () => {
+showListButton.addEventListener("click", (e) => {
+  console.log(e.target);
+  if (mediaQuery.matches) {
+    playerContainer.classList.toggle("hidden");
+    surasContainer.addEventListener("click", clickedOnSurah);
+  }
   surasList.innerHTML = "";
 
   suras.forEach((sura) => {
@@ -213,8 +222,6 @@ const prevSong = async function () {
 
   const res = await data.json();
 
-  // title.textContent = name;
-
   const ayatUrl = res.audio_file.audio_url;
 
   loadSong(ayatUrl);
@@ -244,10 +251,7 @@ const loadSong = function (song) {
   artist.textContent = "Abdul Basit 'Abd us-Samad"; // could change laters
   audio.src = song;
   playSong();
-  // image.src = `img/${song.name}.jpg`;
 };
-
-// on load - select first surah
 
 //update Progress Bar & time
 const updateProgressBar = function (e) {
