@@ -1,3 +1,8 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Kaushan+Script&family=League+Spartan:wght@400;700&family=Nunito&family=Oswald&family=Poppins:wght@400;700&display=swap");
 html {
   box-sizing: border-box;
@@ -35,22 +40,32 @@ body {
 #surasList {
   list-style-type: none;
   padding: 0;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  /* max-height: 200px; */
   width: 200px;
   overflow-y: auto;
+  display: grid;
+  gap: 3px;
 }
 
 #surasList li {
+  background-color: #f9f9f9;
+
   padding: 10px;
   text-align: center;
   border: solid;
   border-color: #c9ced3;
   font-size: 18px;
   font-weight: bold;
+  border-radius: 10px;
+}
+#surasList li:hover {
+  background-color: #777777;
+
+  /* color: #00008b; */
+}
+#surasList li:active {
+  transform: scale(0.95);
 }
 
 .hidden {
