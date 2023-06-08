@@ -1,8 +1,3 @@
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Kaushan+Script&family=League+Spartan:wght@400;700&family=Nunito&family=Oswald&family=Poppins:wght@400;700&display=swap");
 html {
   box-sizing: border-box;
@@ -50,7 +45,6 @@ body {
 
 #surasList li {
   background-color: #f9f9f9;
-
   padding: 10px;
   text-align: center;
   border: solid;

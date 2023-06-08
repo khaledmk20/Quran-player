@@ -157,7 +157,6 @@ const getSurah = async function (surah) {
   loadSong(ayatUrl);
 };
 const clickedOnSurah = function () {
-  console.log("hello");
   playerContainer.classList.remove("hidden");
   surasContainer.classList.add("hidden");
 };
@@ -166,7 +165,7 @@ const showListButton = document.getElementById("showListButton");
 const surasContainer = document.getElementById("surasContainer");
 const surasList = document.getElementById("surasList");
 
-showListButton.addEventListener("click", (e) => {
+showListButton.addEventListener("click", () => {
   if (mediaQuery.matches) {
     playerContainer.classList.toggle("hidden");
     surasContainer.addEventListener("click", clickedOnSurah);
@@ -288,7 +287,6 @@ const updateProgressBar = function (e) {
 const setProgressBar = function (e) {
   const width = this.clientWidth;
   const clickX = e.offsetX;
-  console.log(width, clickX);
   const { duration } = audio;
   audio.currentTime = (clickX / width) * duration;
   playSong();
@@ -312,6 +310,7 @@ const initalSurah = async function () {
   audio.src = ayatUrl;
 };
 
+// hide the suras container if clicked any where in the page
 window.addEventListener("click", function (e) {
   if (
     e.target.classList.contains("player-container") ||
@@ -319,7 +318,11 @@ window.addEventListener("click", function (e) {
     e.target.matches("#showListButton")
   )
     return;
-  else surasContainer.classList.add("hidden");
+  // if small screen, show the playerContainer
+  else if (mediaQuery.matches) {
+    playerContainer.classList.remove("hidden");
+    surasContainer.classList.add("hidden");
+  } else surasContainer.classList.add("hidden");
 });
 // on load
 window.addEventListener("load", initalSurah);
