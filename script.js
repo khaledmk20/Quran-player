@@ -167,7 +167,6 @@ const surasContainer = document.getElementById("surasContainer");
 const surasList = document.getElementById("surasList");
 
 showListButton.addEventListener("click", (e) => {
-  console.log(e.target);
   if (mediaQuery.matches) {
     playerContainer.classList.toggle("hidden");
     surasContainer.addEventListener("click", clickedOnSurah);
@@ -312,5 +311,15 @@ const initalSurah = async function () {
 
   audio.src = ayatUrl;
 };
+
+window.addEventListener("click", function (e) {
+  if (
+    e.target.classList.contains("player-container") ||
+    e.target.classList.contains("fas") ||
+    e.target.matches("#showListButton")
+  )
+    return;
+  else surasContainer.classList.add("hidden");
+});
 // on load
 window.addEventListener("load", initalSurah);

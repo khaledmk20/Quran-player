@@ -156,8 +156,10 @@ h3 {
 /* Query */
 
 /* Phone query */
-@media screen and (min-width: 320px) and (max-width: 480px) {
+
+@media (max-width: 410px) {
   .player-container {
+    height: 450px;
     width: 300px;
   }
   .img-container {
@@ -166,67 +168,8 @@ h3 {
     height: 230px;
     width: 230px;
     top: -50px;
-    /* left: 50px; */
-  }
-  .img-container img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 5px 30px 5px rgba(0, 0, 0, 0.5);
-  }
-  .player-container {
-    height: 450px;
   }
   .player-controls {
     left: 85px;
-  }
-}
-
-@media (max-width: 320px) {
-  body {
-    font-size: 10px;
-  }
-
-  #surasContainer {
-    margin-top: 30px;
-  }
-
-  #surasList {
-    width: 150px;
-  }
-
-  .player-container {
-    height: 400px;
-    width: 300px;
-  }
-
-  .img-container {
-    height: 200px;
-    width: 200px;
-    top: -30px;
-    left: 50px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    font-size: 16px;
-  }
-
-  .progress-container {
-    margin: 20px 10px;
-  }
-
-  .duration-wrapper {
-    top: -15px;
-  }
-
-  .player-controls {
-    top: -10px;
-    left: 90px;
-    width: 150px;
   }
 }
