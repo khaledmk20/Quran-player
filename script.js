@@ -162,6 +162,10 @@ const getSurah = async function (surah) {
   loadSong(ayatUrl);
 };
 const clickedOnSurah = function () {
+  // if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
+  // if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
+  // if (reciterNumber === 9) artist.textContent = "muhammad siddiq al-minshawi";
+
   playerContainer.classList.remove("hidden");
   surasContainer.classList.add("hidden");
 };
@@ -253,7 +257,10 @@ const nextSong = async function () {
 };
 const loadSong = function (song) {
   artist.textContent = clickedSurah;
-  artist.textContent = "Abdul Basit 'Abd us-Samad";
+  if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
+  if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
+  if (reciterNumber === 9) artist.textContent = "muhammad siddiq al-minshawi";
+
   // could change laters
   audio.src = song;
   playSong();
