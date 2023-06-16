@@ -1,4 +1,3 @@
-const image = document.querySelector("img");
 let title = document.getElementById("title");
 const artist = document.getElementById("artist");
 
@@ -134,7 +133,7 @@ const suras = [
   { name: "Al-Falaq", number: 113 },
   { name: "An-Nas", number: 114 },
 ];
-// Alhusary 6 elminshawy 9
+// Alhusary 6 elminshawy 9 , elbana 129
 let surahName;
 let sheikhName;
 let reciterNumber = 1;
@@ -156,16 +155,13 @@ const getSurah = async function (surah) {
   );
 
   res = await data.json();
+  console.log(res);
 
   const ayatUrl = res.audio_file.audio_url;
 
   loadSong(ayatUrl);
 };
 const clickedOnSurah = function () {
-  // if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
-  // if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
-  // if (reciterNumber === 9) artist.textContent = "muhammad siddiq al-minshawi";
-
   playerContainer.classList.remove("hidden");
   surasContainer.classList.add("hidden");
 };
@@ -260,6 +256,7 @@ const loadSong = function (song) {
   if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
   if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
   if (reciterNumber === 9) artist.textContent = "muhammad siddiq al-minshawi";
+  if (reciterNumber === 129) artist.textContent = "mahmoud ali elbanna";
 
   // could change laters
   audio.src = song;
@@ -329,7 +326,6 @@ const initalSurah = async function () {
 
 // hide the suras container if clicked any where in the page
 window.addEventListener("click", function (e) {
-  console.log(e);
   if (
     e.target.classList.contains("player-container") ||
     e.target.classList.contains("fas") ||
@@ -382,6 +378,12 @@ recitersList.addEventListener("change", function (e) {
   if (e.target.value === "option3") {
     reciterNumber = 9;
     artist.textContent = "muhammad siddiq al-minshawi";
+
+    initalSurah();
+  }
+  if (e.target.value === "option4") {
+    reciterNumber = 129;
+    artist.textContent = "mahmoud ali elbanna";
 
     initalSurah();
   }
