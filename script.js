@@ -171,8 +171,6 @@ const surasContainer = document.getElementById("surasContainer");
 const surasList = document.getElementById("surasList");
 
 showListButton.addEventListener("click", () => {
-  // if (!recitersList.contains("hidden")) console.log("hello");
-
   if (mediaQuery.matches) {
     playerContainer.classList.toggle("hidden");
     surasContainer.addEventListener("click", clickedOnSurah);
@@ -324,10 +322,12 @@ const initalSurah = async function () {
 
 // hide the suras container if clicked any where in the page
 window.addEventListener("click", function (e) {
+  console.log(e);
   if (
     e.target.classList.contains("player-container") ||
     e.target.classList.contains("fas") ||
     e.target.classList.contains("fa-solid") ||
+    e.target.id === "change-reciter" ||
     e.target.matches("#showListButton")
   )
     return;
