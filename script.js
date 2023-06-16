@@ -7,6 +7,8 @@ const progressContainer = document.getElementById("progress-container");
 const durationEl = document.getElementById("duration");
 const currentTimeEl = document.getElementById("current-time");
 const playerContainer = document.querySelector(".player-container");
+const reciterChanger = document.getElementById("change-reciter");
+const recitersList = document.querySelector(".reciters-list");
 
 const progress = document.getElementById("progress");
 const prevBtn = document.getElementById("prev");
@@ -132,8 +134,10 @@ const suras = [
   { name: "Al-Falaq", number: 113 },
   { name: "An-Nas", number: 114 },
 ];
+// Alhusary 6 elminshawy 9
 let surahName;
 let sheikhName;
+let reciterNumber = 1;
 
 let res;
 const initialAyat = 0;
@@ -148,8 +152,9 @@ const getSurah = async function (surah) {
   const { name } = suras[surahNumber - 1];
   title.textContent = name;
   const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/2/${surahNumber}`
+    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
   );
+
   res = await data.json();
 
   const ayatUrl = res.audio_file.audio_url;
@@ -215,7 +220,7 @@ const prevSong = async function () {
   const { name } = suras[surahNumber - 1];
   title.textContent = name;
   const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/2/${surahNumber}`
+    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
   );
 
   const res = await data.json();
@@ -234,7 +239,9 @@ const nextSong = async function () {
   const { name } = suras[surahNumber];
   title.textContent = name;
   const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/2/${surahNumber + 1}`
+    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${
+      surahNumber + 1
+    }`
   );
   const res = await data.json();
   surahNumber++;
@@ -246,7 +253,8 @@ const nextSong = async function () {
 };
 const loadSong = function (song) {
   artist.textContent = clickedSurah;
-  artist.textContent = "Abdul Basit 'Abd us-Samad"; // could change laters
+  artist.textContent = "Abdul Basit 'Abd us-Samad";
+  // could change laters
   audio.src = song;
   playSong();
 };
@@ -301,11 +309,13 @@ progressContainer.addEventListener("click", setProgressBar);
 
 const initalSurah = async function () {
   const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/2/1`
+    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/1`
   );
   res = await data.json();
 
   const ayatUrl = res.audio_file.audio_url;
+  audio.currentTime = "0.00";
+  progress.style.width = "0%";
 
   audio.src = ayatUrl;
 };
@@ -323,6 +333,36 @@ window.addEventListener("click", function (e) {
     playerContainer.classList.remove("hidden");
     surasContainer.classList.add("hidden");
   } else surasContainer.classList.add("hidden");
+});
+
+// toggle reciter list
+reciterChanger.addEventListener("click", function () {
+  recitersList.classList.toggle("hidden");
+});
+
+// change the reciter
+recitersList.addEventListener("change", function (e) {
+  pauseSong();
+  if (e.target.value === "option1") {
+    reciterNumber = 1;
+    artist.textContent = "Abdul Basit 'Abd us-Samad";
+
+    initalSurah();
+  }
+  if (e.target.value === "option2") {
+    reciterNumber = 6;
+    artist.textContent = "mahmoud khalil al hussary ";
+
+    initalSurah();
+  }
+  if (e.target.value === "option3") {
+    reciterNumber = 9;
+    artist.textContent = "muhammad siddiq al-minshawi";
+
+    initalSurah();
+  }
+
+  console.log(e.target.value);
 });
 // on load
 window.addEventListener("load", initalSurah);

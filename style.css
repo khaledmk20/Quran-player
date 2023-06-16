@@ -13,6 +13,37 @@ body {
   font-family: League Spartan, sans-serif;
   font-size: 12px;
 }
+/* reciter options */
+
+#change-reciter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reciter-options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 30px;
+  padding-left: 8px;
+}
+.reciter-options label p {
+  display: inline-block;
+  font-size: 20px;
+  font-style: bold;
+  text-transform: uppercase;
+}
+.reciter-options ul {
+  padding: 0;
+  list-style-type: none;
+}
 /* menue icon */
 #showListButton {
   position: absolute;
@@ -55,8 +86,6 @@ body {
 }
 #surasList li:hover {
   background-color: #777777;
-
-  /* color: #00008b; */
 }
 #surasList li:active {
   transform: scale(0.95);
@@ -65,7 +94,6 @@ body {
 .hidden {
   display: none;
 }
-/*  */
 .player-container {
   position: fixed;
   height: 500px;

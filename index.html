@@ -9,17 +9,58 @@
 
 
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"
-    />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel=icon href='img/book-quran-solid.svg'>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+
+        <!-- change reciter -->
+    <div class="reciter-options">
+      <button id="change-reciter"><i class="fa-solid fa-gear"></i></button>
+
+      
+      <ul class="reciters-list hidden" >
+
+        <li>
+       <label for="option1">
+        <i class="fas fa-check-circle"></i>
+        <p>Abdul Basit 'Abd us-Samad</p>
+      </label>
+      <input type="radio" id="option1" name="options" value="option1" checked>
+        </li>
+
+      <li>
+        <label for="option2">
+        <i class="fas fa-check-circle"></i>
+        <p>mahmoud khalil al hussary</p>
+
+      </label>
+      <input type="radio" id="option2" name="options" value="option2">
+      </li>
+      
+      <li>
+         <label for="option3">
+        <i class="fas fa-check-circle"></i>
+        <p> muhammad siddiq al-minshawi</p>
+       </label>
+      <input type="radio" id="option3" name="options" value="option3">
+      
+      </li>
+    </ul>
+      
+    </div>
+
+
+
+
+  
     <!-- menu icon -->
     <button id="showListButton"><i class="fas fa-bars"></i></button>
+
 
     <div id="surasContainer" class="hidden">
       <ul id="surasList" >
@@ -27,7 +68,7 @@
       </ul>
     </div>
 
-    <div class="player-container">
+    <div class="player-container" >
       <!-- song   -->
       <div class="img-container">
         <img src="img/Quran.jpg" alt="album art" />
@@ -39,8 +80,8 @@
       <div class="progress-container" id="progress-container">
         <div class="progress" id="progress"></div>
         <div class="duration-wrapper">
-          <span id="current-time">0:00</span>
-          <span id="duration">2:06</span>
+          <span id="current-time">0:00:00</span>
+          <span id="duration">0:01:18</span>
         </div>
       </div>
       <!-- controls -->
