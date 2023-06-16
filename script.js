@@ -171,6 +171,8 @@ const surasContainer = document.getElementById("surasContainer");
 const surasList = document.getElementById("surasList");
 
 showListButton.addEventListener("click", () => {
+  // if (!recitersList.contains("hidden")) console.log("hello");
+
   if (mediaQuery.matches) {
     playerContainer.classList.toggle("hidden");
     surasContainer.addEventListener("click", clickedOnSurah);
@@ -325,6 +327,7 @@ window.addEventListener("click", function (e) {
   if (
     e.target.classList.contains("player-container") ||
     e.target.classList.contains("fas") ||
+    e.target.classList.contains("fa-solid") ||
     e.target.matches("#showListButton")
   )
     return;
@@ -332,16 +335,30 @@ window.addEventListener("click", function (e) {
   else if (mediaQuery.matches) {
     playerContainer.classList.remove("hidden");
     surasContainer.classList.add("hidden");
-  } else surasContainer.classList.add("hidden");
+    recitersList.classList.add("hidden");
+  } else {
+    surasContainer.classList.add("hidden");
+  }
 });
 
 // toggle reciter list
 reciterChanger.addEventListener("click", function () {
+  if (mediaQuery.matches) playerContainer.classList.toggle("hidden");
+
   recitersList.classList.toggle("hidden");
 });
 
 // change the reciter
 recitersList.addEventListener("change", function (e) {
+  if (mediaQuery.matches) {
+    playerContainer.classList.remove("hidden");
+    recitersList.classList.add("hidden");
+  }
+
+  title.textContent = "Al-Fatiha";
+
+  currentTimeEl.textContent = "0:00:00";
+  durationEl.textContent = "0:00:00";
   pauseSong();
   if (e.target.value === "option1") {
     reciterNumber = 1;
@@ -361,8 +378,6 @@ recitersList.addEventListener("change", function (e) {
 
     initalSurah();
   }
-
-  console.log(e.target.value);
 });
 // on load
 window.addEventListener("load", initalSurah);
