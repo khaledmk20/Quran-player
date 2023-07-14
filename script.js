@@ -312,6 +312,7 @@ audio.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", setProgressBar);
 
 const initalSurah = async function () {
+  surahNumber = 1;
   const data = await fetch(
     `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/1`
   );
