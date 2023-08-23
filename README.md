@@ -1,1 +1,1 @@
-Quran audio player for the reciter abdul basit abdul samad
+Quran audio player for the varies reciter
