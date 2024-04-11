@@ -39,7 +39,7 @@ const getSurah = async function (surah) {
 
   const ayatUrl = res.audio_file.audio_url;
 
-  loadSong(ayatUrl);
+  loadSurah(ayatUrl);
 };
 const clickedOnSurah = function () {
   playerContainer.classList.remove("hidden");
@@ -70,7 +70,7 @@ showListButton.addEventListener("click", () => {
 // check is playing
 let isPlaying = false;
 // play
-const playSong = function () {
+const playSurah = function () {
   isPlaying = true;
   playBtn.setAttribute("title", "pause");
   playBtn.classList.replace("fa-play", "fa-pause");
@@ -84,7 +84,9 @@ const pauseSong = function () {
 };
 
 //play or pause event listners
-playBtn.addEventListener("click", () => (isPlaying ? pauseSong() : playSong()));
+playBtn.addEventListener("click", () =>
+  isPlaying ? pauseSong() : playSurah()
+);
 
 // previous song
 const prevSong = async function () {
@@ -102,8 +104,8 @@ const prevSong = async function () {
 
   const ayatUrl = res.audio_file.audio_url;
 
-  loadSong(ayatUrl);
-  playSong();
+  loadSurah(ayatUrl);
+  playSurah();
 };
 
 // Next song
@@ -123,10 +125,10 @@ const nextSong = async function () {
 
   const ayatUrl = res.audio_file.audio_url;
 
-  loadSong(ayatUrl);
-  playSong();
+  loadSurah(ayatUrl);
+  playSurah();
 };
-const loadSong = function (song) {
+const loadSurah = function (song) {
   artist.textContent = clickedSurah;
   if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
   if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
@@ -134,10 +136,10 @@ const loadSong = function (song) {
   if (reciterNumber === 129) artist.textContent = "mahmoud ali elbanna";
   if (reciterNumber === 3) artist.textContent = "Abdur-Rahman as-Sudais";
   if (reciterNumber === 7) artist.textContent = "Mishary bin Rashid Alafasy";
+  if (reciterNumber === 97) artist.textContent = "Yasser Al-Dosari";
 
-  // could change laters
   audio.src = song;
-  playSong();
+  playSurah();
 };
 
 //update Progress Bar & time
@@ -178,7 +180,7 @@ const setProgressBar = function (e) {
   const clickX = e.offsetX;
   const { duration } = audio;
   audio.currentTime = (clickX / width) * duration;
-  playSong();
+  playSurah();
 };
 
 // Event listners
@@ -274,6 +276,11 @@ recitersList.addEventListener("change", function (e) {
   if (e.target.value === "option6") {
     reciterNumber = 7;
     artist.textContent = "Mishary bin Rashid Alafasy";
+    initalSurah();
+  }
+  if (e.target.value === "option7") {
+    reciterNumber = 97;
+    artist.textContent = "Yasser Al-Dosari";
     initalSurah();
   }
 });
