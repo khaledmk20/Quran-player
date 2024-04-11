@@ -238,7 +238,7 @@ recitersList.addEventListener("change", function (e) {
     recitersList.classList.add("hidden");
   }
 
-  title.textContent = "Al-Fatiha";
+  title.textContent = "Al-Fatiha - الفاتحة ";
 
   currentTimeEl.textContent = "0:00:00";
   durationEl.textContent = "0:00:00";
