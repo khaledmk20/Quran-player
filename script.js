@@ -27,10 +27,10 @@ let surahNumber = 1;
 let clickedSurah;
 
 const getSurah = async function (surah) {
-  clickedSurah = surah.target.innerText;
+  clickedSurah = surah.target.innerText.split(" - ")[0];
   surahNumber = suras.find((s) => s.name === clickedSurah).number;
-  const { name } = suras[surahNumber - 1];
-  title.textContent = name;
+  const { name, arabicName } = suras[surahNumber - 1];
+  title.textContent = `${name} - ${arabicName}`;
   const data = await fetch(
     `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
   );
@@ -59,7 +59,7 @@ showListButton.addEventListener("click", () => {
 
   suras.forEach((sura) => {
     const listItem = document.createElement("li");
-    listItem.textContent = sura.name;
+    listItem.textContent = `${sura.name} - ${sura.arabicName}`;
     listItem.addEventListener("click", getSurah);
     surasList.appendChild(listItem);
   });
@@ -94,8 +94,8 @@ const prevSong = async function () {
   if (surahNumber <= 0) {
     surahNumber = suras.length;
   }
-  const { name } = suras[surahNumber - 1];
-  title.textContent = name;
+  const { name, arabicName } = suras[surahNumber - 1];
+  title.textContent = `${name} - ${arabicName}`;
   const data = await fetch(
     `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
   );
@@ -113,8 +113,8 @@ const nextSong = async function () {
   if (surahNumber > suras.length - 1) {
     surahNumber = 0;
   }
-  const { name } = suras[surahNumber];
-  title.textContent = name;
+  const { name, arabicName } = suras[surahNumber];
+  title.textContent = `${name} - ${arabicName}`;
   const data = await fetch(
     `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${
       surahNumber + 1
