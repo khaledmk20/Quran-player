@@ -172,6 +172,19 @@ h3 {
   left: 120px;
   width: 200px;
 }
+#download-btn {
+  position: absolute;
+  cursor: pointer;
+  bottom: 0;
+  right: -17px;
+  font-size: 20px;
+  margin-left: 10px;
+  color: rgb(129, 129, 129);
+  top: 20px;
+}
+#download-btn:hover {
+  filter: brightness(80%);
+}
 
 .fas {
   font-size: 30px;

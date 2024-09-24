@@ -11,20 +11,46 @@ const playerContainer = document.querySelector(".player-container");
 const reciterChanger = document.getElementById("change-reciter");
 const recitersList = document.querySelector(".reciters-list");
 
+const audioUrl = document.getElementById("audioUrl");
 const progress = document.getElementById("progress");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
+const downloadbtn = document.getElementById("download-btn");
+const iframe = document.getElementById("download-iframe");
 const mediaQuery = window.matchMedia(
   "(min-width: 320px) and (max-width: 850px)"
 );
-
 let reciterNumber = 1;
 
 let res;
-
-let surahNumber = 1;
 let clickedSurah;
+let surahNumber = 1;
+
+function forceDownload(blob, filename) {
+  var a = document.createElement("a");
+  a.download = filename;
+  a.href = blob;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function downloadResource(url, filename) {
+  if (!filename) filename = url.split("\\").pop().split("/").pop();
+  fetch(url, {
+    headers: new Headers({
+      Origin: location.origin,
+    }),
+    mode: "cors",
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      let blobUrl = window.URL.createObjectURL(blob);
+      forceDownload(blobUrl, filename);
+    })
+    .catch((e) => console.error(e));
+}
 
 const getSurah = async function (surah) {
   clickedSurah = surah.target.innerText.split(" - ")[0];
@@ -36,6 +62,7 @@ const getSurah = async function (surah) {
   );
 
   res = await data.json();
+  console.log(res);
 
   const ayatUrl = res.audio_file.audio_url;
 
@@ -67,7 +94,6 @@ showListButton.addEventListener("click", () => {
   surasContainer.classList.toggle("hidden");
 });
 
-// check is playing
 let isPlaying = false;
 // play
 const playSurah = function () {
@@ -76,7 +102,7 @@ const playSurah = function () {
   playBtn.classList.replace("fa-play", "fa-pause");
   audio.play();
 };
-const pauseSong = function () {
+const pauseSurah = function () {
   isPlaying = false;
   playBtn.setAttribute("title", "play");
   playBtn.classList.replace("fa-pause", "fa-play");
@@ -85,11 +111,11 @@ const pauseSong = function () {
 
 //play or pause event listners
 playBtn.addEventListener("click", () =>
-  isPlaying ? pauseSong() : playSurah()
+  isPlaying ? pauseSurah() : playSurah()
 );
 
 // previous song
-const prevSong = async function () {
+const prevSurah = async function () {
   surahNumber--;
   if (surahNumber <= 0) {
     surahNumber = suras.length;
@@ -109,7 +135,7 @@ const prevSong = async function () {
 };
 
 // Next song
-const nextSong = async function () {
+const nextSurah = async function () {
   if (surahNumber > suras.length - 1) {
     surahNumber = 0;
   }
@@ -128,7 +154,7 @@ const nextSong = async function () {
   loadSurah(ayatUrl);
   playSurah();
 };
-const loadSurah = function (song) {
+const loadSurah = function (surah) {
   artist.textContent = clickedSurah;
   if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
   if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
@@ -138,7 +164,7 @@ const loadSurah = function (song) {
   if (reciterNumber === 7) artist.textContent = "Mishary bin Rashid Alafasy";
   if (reciterNumber === 97) artist.textContent = "Yasser Al-Dosari";
 
-  audio.src = song;
+  audio.src = surah;
   playSurah();
 };
 
@@ -184,9 +210,14 @@ const setProgressBar = function (e) {
 };
 
 // Event listners
-prevBtn.addEventListener("click", prevSong);
-nextBtn.addEventListener("click", nextSong);
-audio.addEventListener("ended", nextSong);
+prevBtn.addEventListener("click", prevSurah);
+nextBtn.addEventListener("click", nextSurah);
+downloadbtn.addEventListener("click", () =>
+  downloadResource(audioUrl.src, `${title.textContent} - ${artist.textContent}`)
+);
+//https://download.quranicaudio.com/quran
+//"https://download.quranicaudio.com/quran/yasser_ad-dussary//001.mp3",
+audio.addEventListener("ended", nextSurah);
 audio.addEventListener("timeupdate", updateProgressBar);
 progressContainer.addEventListener("click", setProgressBar);
 
@@ -242,7 +273,7 @@ recitersList.addEventListener("change", function (e) {
 
   currentTimeEl.textContent = "0:00:00";
   durationEl.textContent = "0:00:00";
-  pauseSong();
+  pauseSurah();
   if (e.target.value === "option1") {
     reciterNumber = 1;
     artist.textContent = "Abdul Basit 'Abd us-Samad";
