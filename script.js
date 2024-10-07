@@ -7,9 +7,9 @@ const audio = document.querySelector("audio");
 const progressContainer = document.getElementById("progress-container");
 const durationEl = document.getElementById("duration");
 const currentTimeEl = document.getElementById("current-time");
-const playerContainer = document.querySelector(".player-container");
+const playerContainer = document.getElementById("player-container");
 const reciterChanger = document.getElementById("change-reciter");
-const recitersList = document.querySelector(".reciters-list");
+const recitersList = document.getElementById("reciters-list");
 
 const audioUrl = document.getElementById("audioUrl");
 const progress = document.getElementById("progress");
@@ -17,7 +17,11 @@ const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
 const playBtn = document.getElementById("play");
 const downloadbtn = document.getElementById("download-btn");
-const iframe = document.getElementById("download-iframe");
+
+const showListButton = document.getElementById("showListButton");
+const surasContainer = document.getElementById("surasContainer");
+const surasList = document.getElementById("surasList");
+
 const mediaQuery = window.matchMedia(
   "(min-width: 320px) and (max-width: 850px)"
 );
@@ -62,7 +66,6 @@ const getSurah = async function (surah) {
   );
 
   res = await data.json();
-  console.log(res);
 
   const ayatUrl = res.audio_file.audio_url;
 
@@ -72,10 +75,6 @@ const clickedOnSurah = function () {
   playerContainer.classList.remove("hidden");
   surasContainer.classList.add("hidden");
 };
-
-const showListButton = document.getElementById("showListButton");
-const surasContainer = document.getElementById("surasContainer");
-const surasList = document.getElementById("surasList");
 
 showListButton.addEventListener("click", () => {
   if (mediaQuery.matches) {
