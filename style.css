@@ -48,7 +48,6 @@ body {
   margin: 0;
   height: 100vh;
   background-image: url(../img/4a0b3689031725.5de839cf4e904.jpg);
-  backdrop-filter: blur(4px);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -58,6 +57,25 @@ body {
   align-items: center;
   font-family: League Spartan, sans-serif;
   font-size: 12px;
+  position: relative;
+
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(../img/4a0b3689031725.5de839cf4e904.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  filter: blur(4px);
+  /* Adjust the value as needed /
+  z-index: -1; / Ensures the blur is behind the content */
 }
 
 /* reciter options */
@@ -322,12 +340,11 @@ h3 {
 
 @media (max-width: 410px) {
   .player-container {
-    height: 450px;
-    width: 300px;
+    width: 340px;
   }
 
   .img-container {
-    left: 35px;
+    left: 45px;
     position: relative;
     height: 230px;
     width: 230px;
@@ -335,6 +352,7 @@ h3 {
   }
 
   .player-controls {
-    left: 85px;
+    left: 81px;
+    top: 29px;
   }
 }
