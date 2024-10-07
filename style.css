@@ -1,31 +1,98 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa&family=Kaushan+Script&family=League+Spartan:wght@400;700&family=Nunito&family=Oswald&family=Poppins:wght@400;700&display=swap");
-html {
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+.containers {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+/* small */
+
+@media(min-width:768px) {
+  .containers {
+    width: 750px;
+  }
+}
+
+/* midum */
+
+@media(min-width:992px) {
+  .containers {
+    width: 970px;
+  }
+}
+
+/* large */
+
+@media(min-width:1200px) {
+  .containers {
+    width: 1170px;
+  }
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: #c9ced3;
+  height: 100vh;
+  background-image: url(../img/4a0b3689031725.5de839cf4e904.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: League Spartan, sans-serif;
   font-size: 12px;
+  position: relative;
+
 }
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(../img/4a0b3689031725.5de839cf4e904.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  filter: blur(4px);
+  /* Adjust the value as needed /
+  z-index: -1; / Ensures the blur is behind the content */
+}
+
 /* reciter options */
 
 #change-reciter {
   position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #333;
+  top: 10px;
+  left: 10px;
+  background-color: #452426;
   color: #fff;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  z-index: 5;
 }
+
 
 .reciter-options {
   position: fixed;
@@ -34,28 +101,60 @@ body {
   padding-top: 30px;
   padding-left: 8px;
 }
+
+.reciter-options i {
+  color: rgb(248, 248, 248);
+}
+
 .reciter-options label p {
   display: inline-block;
   font-size: 20px;
-  font-style: bold;
+  font-style: normal;
+  color: white;
+  z-index: 2;
+  padding: 10px;
   text-transform: uppercase;
 }
+
 .reciter-options ul {
   padding: 0;
   list-style-type: none;
+  position: relative;
+  bottom: -25px;
 }
+
+@media(max-width:767px) {
+  .reciter-options ul {
+    width: 406px;
+    font-size: 1px;
+    line-height: 2;
+
+
+
+
+  }
+
+  .reciter-options label p {
+    font-size: 18px;
+  }
+
+}
+
+
 /* menue icon */
 #showListButton {
   position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #333;
+  top: 10px;
+  right: 10px;
+  background-color: #452426;
   color: #fff;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
 }
+
+
 #surasContainer {
   cursor: pointer;
   position: absolute;
@@ -63,14 +162,16 @@ body {
   right: 0;
   margin-top: 40px;
 }
+
 #surasList {
   list-style-type: none;
   padding: 0;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   width: 200px;
-  overflow-y: auto;
+  overflow-y: hidden;
   display: grid;
+  overflow: hidden;
   gap: 3px;
 }
 
@@ -83,10 +184,26 @@ body {
   font-size: 18px;
   font-weight: bold;
   border-radius: 10px;
+  position: relative;
+  bottom: -15px;
 }
+
+#surasList ::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f66b";
+  font-weight: 900;
+  position: relative;
+
+  left: -15px;
+  color: var(--main-color);
+  margin-left: 10px;
+}
+
+
 #surasList li:hover {
   background-color: #777777;
 }
+
 #surasList li:active {
   transform: scale(0.95);
 }
@@ -94,13 +211,25 @@ body {
 .hidden {
   display: none;
 }
+
 .player-container {
   position: fixed;
   height: 500px;
   width: 400px;
   background: #e7e7e7;
   border-radius: 20px;
-  box-shadow: 0 15px 30px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 5px 13px 7px rgb(107 50 54);
+
+}
+
+@media (max-width:(767px)) {
+  .player-container {
+    width: 400px;
+  }
+}
+
+.player-container .text {
+  font-weight: bold;
 }
 
 .img-container {
@@ -114,7 +243,6 @@ body {
 .img-container img {
   height: 100%;
   width: 100%;
-  object-fit: cover;
   border-radius: 20px;
   box-shadow: 0 5px 30px 5px rgba(0, 0, 0, 0.5);
 }
@@ -172,6 +300,7 @@ h3 {
   left: 120px;
   width: 200px;
 }
+
 #download-btn {
   position: absolute;
   cursor: pointer;
@@ -182,6 +311,7 @@ h3 {
   color: rgb(129, 129, 129);
   top: 20px;
 }
+
 #download-btn:hover {
   filter: brightness(80%);
 }
@@ -193,6 +323,7 @@ h3 {
   cursor: pointer;
   user-select: none;
 }
+
 .fas:hover {
   filter: brightness(80%);
 }
@@ -209,17 +340,19 @@ h3 {
 
 @media (max-width: 410px) {
   .player-container {
-    height: 450px;
-    width: 300px;
+    width: 340px;
   }
+
   .img-container {
-    left: 35px;
+    left: 45px;
     position: relative;
     height: 230px;
     width: 230px;
     top: -50px;
   }
+
   .player-controls {
-    left: 85px;
+    left: 81px;
+    top: 29px;
   }
 }
