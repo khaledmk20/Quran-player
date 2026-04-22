@@ -260,16 +260,17 @@ function formatTime(secs) {
 ══════════════════════════════════════ */
 downloadBtn.addEventListener("click", () => {
   if (!currentAudioUrl) return;
-  const filename = `${titleEl.textContent} - ${artistEl.textContent}.mp3`;
-  downloadResource(currentAudioUrl, filename);
-});
 
-function downloadResource(url, filename) {
-  if (!filename) filename = url.split("/").pop();
-  fetch(url, {
-    headers: new Headers({ Origin: location.origin }),
-    mode: "cors",
-  })
+  // Give immediate visual feedback
+  const icon = downloadBtn.querySelector("i");
+  const label = downloadBtn.querySelector("span");
+  downloadBtn.disabled = true;
+  icon.className = "fas fa-spinner fa-spin";
+  if (label) label.textContent = "Downloading…";
+
+  const filename = `${titleEl.textContent} - ${artistEl.textContent}.mp3`;
+
+  fetch(currentAudioUrl, { mode: "cors" })
     .then((r) => r.blob())
     .then((blob) => {
       const blobUrl = URL.createObjectURL(blob);
@@ -281,8 +282,13 @@ function downloadResource(url, filename) {
       a.remove();
       URL.revokeObjectURL(blobUrl);
     })
-    .catch((e) => console.error("Download error:", e));
-}
+    .catch((e) => console.error("Download error:", e))
+    .finally(() => {
+      downloadBtn.disabled = false;
+      icon.className = "fas fa-download";
+      if (label) label.textContent = "Download";
+    });
+});
 
 /* ══════════════════════════════════════
    Loading indicator
