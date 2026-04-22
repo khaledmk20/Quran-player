@@ -1,138 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
-<link>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quran Player</title>
-<!-- <link rel="icon" type="image/png" href="favicon.png" /> -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quran Player — القرآن الكريم</title>
+  <meta name="description" content="A beautiful Quran audio player with multiple reciters. Listen to all 114 Surahs of the Holy Quran." />
+  <link rel="icon" type="image/svg+xml" href="img/book-quran-solid.svg" />
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-  crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<link rel=icon href='img/book-quran-solid.svg'>
-<link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- change reciter -->
-  <div class="reciter-options">
-    <button id="change-reciter"><i class="fa-duotone fa-solid fa-mosque" style="font-size: 20px;"></i></i></button>
-
-
-    <ul class="reciters-list hidden" id="reciters-list">
-
-      <li>
-        <label for="option1">
-          <i class="fas fa-check-circle"></i>
-          <p>Abdul Basit 'Abd us-Samad</p>
-        </label>
-        <input type="radio" id="option1" name="options" value="option1" checked>
-      </li>
-
-      <li>
-        <label for="option2">
-          <i class="fas fa-check-circle"></i>
-          <p>mahmoud khalil al hussary</p>
-
-        </label>
-        <input type="radio" id="option2" name="options" value="option2">
-      </li>
-
-      <li>
-        <label for="option3">
-          <i class="fas fa-check-circle"></i>
-          <p> muhammad siddiq al-minshawi</p>
-        </label>
-        <input type="radio" id="option3" name="options" value="option3">
-
-      </li>
-
-      <li>
-        <label for="option4">
-          <i class="fas fa-check-circle"></i>
-          <p> mahmoud ali elbanna</p>
-        </label>
-        <input type="radio" id="option4" name="options" value="option4">
-
-      </li>
-
-
-      <li>
-        <label for="option5">
-          <i class="fas fa-check-circle"></i>
-          <p> Abdur-Rahman as-Sudais </p>
-        </label>
-        <input type="radio" id="option5" name="options" value="option5">
-
-      </li>
-
-
-
-      <li>
-        <label for="option6">
-          <i class="fas fa-check-circle"></i>
-          <p> mishary al afasy </p>
-        </label>
-        <input type="radio" id="option6" name="options" value="option6">
-
-      </li>
-      <li>
-        <label for="option7">
-          <i class="fas fa-check-circle"></i>
-          <p>Yasser Al-Dosari</p>
-        </label>
-        <input type="radio" id="option7" name="options" value="option7">
-
-      </li>
-
-    </ul>
-
-  </div>
-
-  <!-- menu icon -->
-  <button id="showListButton"><i class="fa-solid fa-star-and-crescent" style="font-size: 20px;"></i></i></button>
-
-
-  <div id="surasContainer" class="hidden">
-    <ul id="surasList">
-      <!-- List items will be dynamically added here -->
-    </ul>
-  </div>
-
-  <div class="player-container" id="player-container">
-    <!-- surahs   -->
-    <div class="img-container">
-      <img src="img/download.jfif" alt="album art" />
-    </div>
-    <div class="text">
-      <h2 id="title">Al-Fatiha - الفاتحة</h2>
-      <h3 id="artist">Abdul Basit 'Abd us-Samad</h3>
-      <audio id="audioUrl" src=""></audio>
-    </div>
-    <!-- progress -->
-    <div class="progress-container" id="progress-container">
-      <div class="progress" id="progress"></div>
-      <div class="duration-wrapper">
-        <span id="current-time">0:00:00</span>
-        <span id="duration">0:01:18</span>
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="img/book-quran-solid.svg" alt="Quran" class="sidebar-logo-icon" />
+        <span class="sidebar-logo-text">القرآن الكريم</span>
       </div>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    <!-- controls -->
-    <div class="player-controls">
-      <i class="fas fa-backward" style="color: #3d2224;" id="prev" title="previous"></i>
-      <i class="fas fa-play main-button " style="color:#452426;" id="play" title="play"></i>
-      <i class="fas fa-forward" style="color: #452426;" id="next" title="next"></i>
-      <i id="download-btn" class="fa-solid fa-download"></i>
+
+    <div class="sidebar-search">
+      <i class="fas fa-search sidebar-search-icon"></i>
+      <input type="text" id="surah-search" placeholder="Search surah…" autocomplete="off" />
     </div>
+
+    <ul class="surahs-list" id="surasList">
+      <!-- Dynamically populated -->
+    </ul>
+  </aside>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ══════════════ MAIN APP ══════════════ -->
+  <main class="app-shell">
+
+    <!-- TOP NAV -->
+    <header class="topbar">
+      <button class="topbar-btn" id="showListButton" aria-label="Browse surahs" title="Browse Surahs">
+        <i class="fas fa-list-ul"></i>
+        <span>Surahs</span>
+      </button>
+
+      <div class="topbar-brand">
+        <img src="img/book-quran-solid.svg" alt="Quran" />
+        <span>Quran Player</span>
+      </div>
+
+      <button class="topbar-btn" id="change-reciter" aria-label="Change reciter" title="Change Reciter">
+        <i class="fas fa-microphone"></i>
+        <span>Reciter</span>
+      </button>
+    </header>
+
+    <!-- PLAYER SECTION -->
+    <section class="player-section">
+
+      <!-- Decorative geometric ring -->
+      <div class="geometric-ring" aria-hidden="true">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="185" stroke="rgba(212,175,55,0.15)" stroke-width="1" fill="none" stroke-dasharray="6 8" />
+          <circle cx="200" cy="200" r="170" stroke="rgba(212,175,55,0.08)" stroke-width="1" fill="none" />
+          <circle cx="200" cy="200" r="155" stroke="rgba(212,175,55,0.05)" stroke-width="1" fill="none" stroke-dasharray="3 12" />
+        </svg>
+      </div>
+
+      <!-- Artwork -->
+      <div class="artwork-wrapper">
+        <div class="artwork-ring" id="artwork-ring">
+          <div class="artwork-inner">
+            <img src="img/Quran.jpg" alt="Quran" id="album-art" />
+            <div class="artwork-overlay">
+              <i class="fas fa-quran"></i>
+            </div>
+          </div>
+        </div>
+        <!-- Reflection -->
+        <div class="artwork-reflection" aria-hidden="true"></div>
+      </div>
+
+      <!-- Track Info -->
+      <div class="track-info">
+        <p class="track-arabic" id="surah-arabic">الفاتحة</p>
+        <h1 class="track-title" id="title">Al-Fatiha</h1>
+        <p class="track-reciter" id="artist">Abdul Basit 'Abd us-Samad</p>
+      </div>
+
+      <!-- Hidden audio element -->
+      <audio id="audioUrl" src=""></audio>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-bar-wrap" id="progress-container" role="slider" aria-label="Seek" tabindex="0">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress"></div>
+            <div class="progress-thumb" id="progress-thumb"></div>
+          </div>
+        </div>
+        <div class="time-row">
+          <span id="current-time">0:00:00</span>
+          <span id="duration">0:00:00</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-row">
+        <button class="ctrl-btn ctrl-secondary" id="prev" title="Previous Surah" aria-label="Previous">
+          <i class="fas fa-step-backward"></i>
+        </button>
+
+        <button class="ctrl-btn ctrl-play" id="play" title="Play" aria-label="Play / Pause">
+          <i class="fas fa-play" id="play-icon"></i>
+        </button>
+
+        <button class="ctrl-btn ctrl-secondary" id="next" title="Next Surah" aria-label="Next">
+          <i class="fas fa-step-forward"></i>
+        </button>
+      </div>
+
+      <!-- Extra controls -->
+      <div class="extra-controls">
+        <button class="extra-btn" id="download-btn" title="Download" aria-label="Download">
+          <i class="fas fa-download"></i>
+          <span>Download</span>
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ══════════════ RECITER PANEL ══════════════ -->
+  <div class="reciter-panel" id="reciter-panel">
+    <div class="reciter-panel-header">
+      <h2><i class="fas fa-microphone-alt"></i> Choose Reciter</h2>
+      <button class="reciter-panel-close" id="reciter-panel-close" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="reciters-list" id="reciters-list">
+      <li>
+        <label class="reciter-item" for="option1">
+          <input type="radio" id="option1" name="options" value="option1" checked />
+          <div class="reciter-info">
+            <span class="reciter-name">Abdul Basit 'Abd us-Samad</span>
+            <span class="reciter-style">Mujawwad</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option2">
+          <input type="radio" id="option2" name="options" value="option2" />
+          <div class="reciter-info">
+            <span class="reciter-name">Mahmoud Khalil Al-Hussary</span>
+            <span class="reciter-style">Murattal</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option3">
+          <input type="radio" id="option3" name="options" value="option3" />
+          <div class="reciter-info">
+            <span class="reciter-name">Muhammad Siddiq Al-Minshawi</span>
+            <span class="reciter-style">Mujawwad</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option4">
+          <input type="radio" id="option4" name="options" value="option4" />
+          <div class="reciter-info">
+            <span class="reciter-name">Mahmoud Ali Al-Banna</span>
+            <span class="reciter-style">Murattal</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option5">
+          <input type="radio" id="option5" name="options" value="option5" />
+          <div class="reciter-info">
+            <span class="reciter-name">Abdur-Rahman As-Sudais</span>
+            <span class="reciter-style">Murattal</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option6">
+          <input type="radio" id="option6" name="options" value="option6" />
+          <div class="reciter-info">
+            <span class="reciter-name">Mishary Rashid Al-Afasy</span>
+            <span class="reciter-style">Murattal</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+      <li>
+        <label class="reciter-item" for="option7">
+          <input type="radio" id="option7" name="options" value="option7" />
+          <div class="reciter-info">
+            <span class="reciter-name">Yasser Al-Dosari</span>
+            <span class="reciter-style">Murattal</span>
+          </div>
+          <i class="fas fa-check-circle reciter-check"></i>
+        </label>
+      </li>
+    </ul>
   </div>
-  <!-- Script -->
+
+  <!-- Loading indicator -->
+  <div class="loading-bar" id="loading-bar"></div>
+
   <script type="module" src="script.js"></script>
 </body>
-
 </html>

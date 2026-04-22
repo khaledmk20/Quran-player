@@ -1,318 +1,316 @@
 import suras from "./surahsList.js";
 
-let title = document.getElementById("title");
-const artist = document.getElementById("artist");
-
-const audio = document.querySelector("audio");
-const progressContainer = document.getElementById("progress-container");
-const durationEl = document.getElementById("duration");
+/* ══════════════════════════════════════
+   DOM References
+══════════════════════════════════════ */
+const titleEl       = document.getElementById("title");
+const surahArabicEl = document.getElementById("surah-arabic");
+const artistEl      = document.getElementById("artist");
+const audio         = document.getElementById("audioUrl");
+const progressFill  = document.getElementById("progress");
+// The thumb follows the fill element via CSS (child of fill)
+const progressWrap  = document.getElementById("progress-container");
 const currentTimeEl = document.getElementById("current-time");
-const playerContainer = document.getElementById("player-container");
-const reciterChanger = document.getElementById("change-reciter");
-const recitersList = document.getElementById("reciters-list");
+const durationEl    = document.getElementById("duration");
 
-const audioUrl = document.getElementById("audioUrl");
-const progress = document.getElementById("progress");
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
-const playBtn = document.getElementById("play");
-const downloadbtn = document.getElementById("download-btn");
+const playBtn       = document.getElementById("play");
+const playIcon      = document.getElementById("play-icon");
+const prevBtn       = document.getElementById("prev");
+const nextBtn       = document.getElementById("next");
+const downloadBtn   = document.getElementById("download-btn");
 
-const showListButton = document.getElementById("showListButton");
-const surasContainer = document.getElementById("surasContainer");
-const surasList = document.getElementById("surasList");
+const showListBtn   = document.getElementById("showListButton");
+const sidebar       = document.getElementById("sidebar");
+const sidebarClose  = document.getElementById("sidebar-close");
+const surasList     = document.getElementById("surasList");
+const surahSearch   = document.getElementById("surah-search");
+const overlay       = document.getElementById("overlay");
 
-const mediaQuery = window.matchMedia(
-  "(min-width: 320px) and (max-width: 850px)"
-);
+const reciterBtn        = document.getElementById("change-reciter");
+const reciterPanel      = document.getElementById("reciter-panel");
+const reciterPanelClose = document.getElementById("reciter-panel-close");
+const recitersListEl    = document.getElementById("reciters-list");
+
+const artworkRing   = document.getElementById("artwork-ring");
+const loadingBar    = document.getElementById("loading-bar");
+
+/* ══════════════════════════════════════
+   State
+══════════════════════════════════════ */
+let isPlaying    = false;
+let surahNumber  = 1;
 let reciterNumber = 1;
+let currentAudioUrl = "";
 
-let res;
-let clickedSurah;
-let surahNumber = 1;
-
-function forceDownload(blob, filename) {
-  var a = document.createElement("a");
-  a.download = filename;
-  a.href = blob;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-function downloadResource(url, filename) {
-  if (!filename) filename = url.split("\\").pop().split("/").pop();
-  fetch(url, {
-    headers: new Headers({
-      Origin: location.origin,
-    }),
-    mode: "cors",
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      let blobUrl = window.URL.createObjectURL(blob);
-      forceDownload(blobUrl, filename);
-    })
-    .catch((e) => console.error(e));
-}
-
-const getSurah = async function (surah) {
-  clickedSurah = surah.target.innerText.split(" - ")[0];
-  surahNumber = suras.find((s) => s.name === clickedSurah).number;
-  const { name, arabicName } = suras[surahNumber - 1];
-  title.textContent = `${name} - ${arabicName}`;
-  const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
-  );
-
-  res = await data.json();
-
-  const ayatUrl = res.audio_file.audio_url;
-
-  loadSurah(ayatUrl);
-};
-const clickedOnSurah = function () {
-  playerContainer.classList.remove("hidden");
-  surasContainer.classList.add("hidden");
+const reciterNames = {
+  1:   "Abdul Basit 'Abd us-Samad",
+  6:   "Mahmoud Khalil Al-Hussary",
+  9:   "Muhammad Siddiq Al-Minshawi",
+  129: "Mahmoud Ali Al-Banna",
+  3:   "Abdur-Rahman As-Sudais",
+  7:   "Mishary Rashid Al-Afasy",
+  97:  "Yasser Al-Dosari",
 };
 
-showListButton.addEventListener("click", () => {
-  if (mediaQuery.matches) {
-    playerContainer.classList.toggle("hidden");
-    surasContainer.addEventListener("click", clickedOnSurah);
-  }
+/* ══════════════════════════════════════
+   Sidebar
+══════════════════════════════════════ */
+function openSidebar() {
+  // Populate list when opening
+  renderSurahsList(surahSearch.value);
+  sidebar.classList.add("open");
+  overlay.classList.add("visible");
+  surahSearch.focus();
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("visible");
+}
+
+showListBtn.addEventListener("click", openSidebar);
+sidebarClose.addEventListener("click", closeSidebar);
+overlay.addEventListener("click", () => { closeSidebar(); closeReciterPanel(); });
+
+function renderSurahsList(filter = "") {
+  const q = filter.trim().toLowerCase();
   surasList.innerHTML = "";
 
   suras.forEach((sura) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${sura.name} - ${sura.arabicName}`;
-    listItem.addEventListener("click", getSurah);
-    surasList.appendChild(listItem);
+    if (q && !sura.name.toLowerCase().includes(q) && !sura.arabicName.includes(q)) return;
+
+    const li = document.createElement("li");
+    li.dataset.number = sura.number;
+    if (sura.number === surahNumber) li.classList.add("active");
+
+    li.innerHTML = `
+      <div class="surah-num">${sura.number}</div>
+      <div class="surah-names">
+        <span class="surah-name-en">${sura.name}</span>
+        <span class="surah-name-ar">${sura.arabicName}</span>
+      </div>
+    `;
+
+    li.addEventListener("click", () => selectSurah(sura.number));
+    surasList.appendChild(li);
   });
+}
 
-  surasContainer.classList.toggle("hidden");
-});
+surahSearch.addEventListener("input", () => renderSurahsList(surahSearch.value));
 
-let isPlaying = false;
-// play
-const playSurah = function () {
-  isPlaying = true;
-  playBtn.setAttribute("title", "pause");
-  playBtn.classList.replace("fa-play", "fa-pause");
-  audio.play();
-};
-const pauseSurah = function () {
-  isPlaying = false;
-  playBtn.setAttribute("title", "play");
-  playBtn.classList.replace("fa-pause", "fa-play");
-  audio.pause();
-};
+function highlightActiveSurah() {
+  surasList.querySelectorAll("li").forEach((li) => {
+    li.classList.toggle("active", parseInt(li.dataset.number) === surahNumber);
+  });
+}
 
-//play or pause event listners
-playBtn.addEventListener("click", () =>
-  isPlaying ? pauseSurah() : playSurah()
-);
+/* ══════════════════════════════════════
+   Reciter Panel
+══════════════════════════════════════ */
+function openReciterPanel() {
+  reciterPanel.classList.add("open");
+  overlay.classList.add("visible");
+}
 
-// previous song
-const prevSurah = async function () {
-  surahNumber--;
-  if (surahNumber <= 0) {
-    surahNumber = suras.length;
-  }
-  const { name, arabicName } = suras[surahNumber - 1];
-  title.textContent = `${name} - ${arabicName}`;
-  const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${surahNumber}`
-  );
+function closeReciterPanel() {
+  reciterPanel.classList.remove("open");
+  overlay.classList.remove("visible");
+}
 
-  const res = await data.json();
+reciterBtn.addEventListener("click", openReciterPanel);
+reciterPanelClose.addEventListener("click", closeReciterPanel);
 
-  const ayatUrl = res.audio_file.audio_url;
+recitersListEl.addEventListener("change", (e) => {
+  const map = {
+    option1: 1,
+    option2: 6,
+    option3: 9,
+    option4: 129,
+    option5: 3,
+    option6: 7,
+    option7: 97,
+  };
+  const val = e.target.value;
+  reciterNumber = map[val];
+  artistEl.textContent = reciterNames[reciterNumber];
 
-  loadSurah(ayatUrl);
-  playSurah();
-};
-
-// Next song
-const nextSurah = async function () {
-  if (surahNumber > suras.length - 1) {
-    surahNumber = 0;
-  }
-  const { name, arabicName } = suras[surahNumber];
-  title.textContent = `${name} - ${arabicName}`;
-  const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${
-      surahNumber + 1
-    }`
-  );
-  const res = await data.json();
-  surahNumber++;
-
-  const ayatUrl = res.audio_file.audio_url;
-
-  loadSurah(ayatUrl);
-  playSurah();
-};
-const loadSurah = function (surah) {
-  artist.textContent = clickedSurah;
-  if (reciterNumber === 1) artist.textContent = "Abdul Basit 'Abd us-Samad";
-  if (reciterNumber === 6) artist.textContent = "mahmoud khalil al hussary";
-  if (reciterNumber === 9) artist.textContent = "muhammad siddiq al-minshawi";
-  if (reciterNumber === 129) artist.textContent = "mahmoud ali elbanna";
-  if (reciterNumber === 3) artist.textContent = "Abdur-Rahman as-Sudais";
-  if (reciterNumber === 7) artist.textContent = "Mishary bin Rashid Alafasy";
-  if (reciterNumber === 97) artist.textContent = "Yasser Al-Dosari";
-
-  audio.src = surah;
-  playSurah();
-};
-
-//update Progress Bar & time
-const updateProgressBar = function (e) {
-  if (!isPlaying) return;
-  const { duration, currentTime } = e.srcElement;
-  // Update progress bar width
-  const progressPercent = (currentTime / duration) * 100;
-  progress.style.width = `${progressPercent}%`;
-
-  // Calculate display for duration
-  let durationHours, durationMinutes, durationSeconds;
-  if (isNaN(duration)) {
-    durationHours = "--";
-    durationMinutes = "--";
-    durationSeconds = "--";
-  } else {
-    durationHours = Math.floor(duration / 3600);
-    durationMinutes = Math.floor((duration % 3600) / 60);
-    durationSeconds = Math.floor(duration % 60);
-  }
-  durationEl.textContent = `${durationHours}:${durationMinutes
-    .toString()
-    .padStart(2, "0")}:${durationSeconds.toString().padStart(2, "0")}`;
-
-  // Calculate display for current time
-  const currentHours = Math.floor(currentTime / 3600);
-  const currentMinutes = Math.floor((currentTime % 3600) / 60);
-  const currentSeconds = Math.floor(currentTime % 60);
-  currentTimeEl.textContent = `${currentHours}:${currentMinutes
-    .toString()
-    .padStart(2, "0")}:${currentSeconds.toString().padStart(2, "0")}`;
-};
-
-// Set Progress Bar
-const setProgressBar = function (e) {
-  const width = this.clientWidth;
-  const clickX = e.offsetX;
-  const { duration } = audio;
-  audio.currentTime = (clickX / width) * duration;
-  playSurah();
-};
-
-// Event listners
-prevBtn.addEventListener("click", prevSurah);
-nextBtn.addEventListener("click", nextSurah);
-downloadbtn.addEventListener("click", () =>
-  downloadResource(audioUrl.src, `${title.textContent} - ${artist.textContent}`)
-);
-//https://download.quranicaudio.com/quran
-//"https://download.quranicaudio.com/quran/yasser_ad-dussary//001.mp3",
-audio.addEventListener("ended", nextSurah);
-audio.addEventListener("timeupdate", updateProgressBar);
-progressContainer.addEventListener("click", setProgressBar);
-
-const initalSurah = async function () {
-  surahNumber = 1;
-  const data = await fetch(
-    `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/1`
-  );
-  res = await data.json();
-
-  const ayatUrl = res.audio_file.audio_url;
-  audio.currentTime = "0.00";
-  progress.style.width = "0%";
-
-  audio.src = ayatUrl;
-};
-
-// hide the suras container if clicked any where in the page
-window.addEventListener("click", function (e) {
-  if (
-    e.target.classList.contains("player-container") ||
-    e.target.classList.contains("fas") ||
-    e.target.classList.contains("fa-solid") ||
-    e.target.id === "change-reciter" ||
-    e.target.matches("#showListButton")
-  )
-    return;
-  // if small screen, show the playerContainer
-  else if (mediaQuery.matches) {
-    playerContainer.classList.remove("hidden");
-    surasContainer.classList.add("hidden");
-    recitersList.classList.add("hidden");
-  } else {
-    surasContainer.classList.add("hidden");
-  }
-});
-
-// toggle reciter list
-reciterChanger.addEventListener("click", function () {
-  if (mediaQuery.matches) playerContainer.classList.toggle("hidden");
-
-  recitersList.classList.toggle("hidden");
-});
-
-// change the reciter
-recitersList.addEventListener("change", function (e) {
-  if (mediaQuery.matches) {
-    playerContainer.classList.remove("hidden");
-    recitersList.classList.add("hidden");
-  }
-
-  title.textContent = "Al-Fatiha - الفاتحة ";
-
+  // Reset and reload current surah for new reciter
+  pauseAudio();
   currentTimeEl.textContent = "0:00:00";
-  durationEl.textContent = "0:00:00";
-  pauseSurah();
-  if (e.target.value === "option1") {
-    reciterNumber = 1;
-    artist.textContent = "Abdul Basit 'Abd us-Samad";
-
-    initalSurah();
-  }
-  if (e.target.value === "option2") {
-    reciterNumber = 6;
-    artist.textContent = "mahmoud khalil al hussary";
-
-    initalSurah();
-  }
-  if (e.target.value === "option3") {
-    reciterNumber = 9;
-    artist.textContent = "muhammad siddiq al-minshawi";
-
-    initalSurah();
-  }
-  if (e.target.value === "option4") {
-    reciterNumber = 129;
-    artist.textContent = "mahmoud ali elbanna";
-
-    initalSurah();
-  }
-  if (e.target.value === "option5") {
-    reciterNumber = 3;
-    artist.textContent = "Abdur-Rahman as-Sudais";
-
-    initalSurah();
-  }
-  if (e.target.value === "option6") {
-    reciterNumber = 7;
-    artist.textContent = "Mishary bin Rashid Alafasy";
-    initalSurah();
-  }
-  if (e.target.value === "option7") {
-    reciterNumber = 97;
-    artist.textContent = "Yasser Al-Dosari";
-    initalSurah();
-  }
+  durationEl.textContent    = "0:00:00";
+  progressFill.style.width  = "0%";
+  loadSurahByNumber(surahNumber);
+  closeReciterPanel();
 });
-// on load
-window.addEventListener("load", initalSurah);
+
+/* ══════════════════════════════════════
+   Audio Controls
+══════════════════════════════════════ */
+function playAudio() {
+  isPlaying = true;
+  playIcon.classList.replace("fa-play", "fa-pause");
+  playBtn.classList.add("playing");
+  artworkRing.classList.add("playing");
+  audio.play();
+}
+
+function pauseAudio() {
+  isPlaying = false;
+  playIcon.classList.replace("fa-pause", "fa-play");
+  playBtn.classList.remove("playing");
+  artworkRing.classList.remove("playing");
+  audio.pause();
+}
+
+playBtn.addEventListener("click", () => {
+  if (!audio.src || audio.src === window.location.href) return; // nothing loaded yet
+  isPlaying ? pauseAudio() : playAudio();
+});
+
+prevBtn.addEventListener("click", async () => {
+  surahNumber--;
+  if (surahNumber < 1) surahNumber = suras.length;
+  await loadSurahByNumber(surahNumber);
+});
+
+nextBtn.addEventListener("click", async () => {
+  surahNumber++;
+  if (surahNumber > suras.length) surahNumber = 1;
+  await loadSurahByNumber(surahNumber);
+});
+
+audio.addEventListener("ended", async () => {
+  surahNumber++;
+  if (surahNumber > suras.length) surahNumber = 1;
+  await loadSurahByNumber(surahNumber);
+});
+
+/* ══════════════════════════════════════
+   Surah Selection
+══════════════════════════════════════ */
+async function selectSurah(number) {
+  surahNumber = number;
+  closeSidebar();
+  await loadSurahByNumber(number);
+}
+
+async function loadSurahByNumber(number) {
+  const sura = suras[number - 1];
+  titleEl.textContent       = sura.name;
+  surahArabicEl.textContent = sura.arabicName;
+  artistEl.textContent      = reciterNames[reciterNumber];
+
+  // Update progress UI
+  progressFill.style.width = "0%";
+  currentTimeEl.textContent = "0:00:00";
+  durationEl.textContent    = "0:00:00";
+
+  showLoading(true);
+
+  try {
+    const response = await fetch(
+      `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/${number}`
+    );
+    const data = await response.json();
+    currentAudioUrl = data.audio_file.audio_url;
+
+    audio.src = currentAudioUrl;
+    highlightActiveSurah();
+    playAudio();
+  } catch (err) {
+    console.error("Failed to load surah:", err);
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ══════════════════════════════════════
+   Progress Bar
+══════════════════════════════════════ */
+audio.addEventListener("timeupdate", updateProgress);
+progressWrap.addEventListener("click", seekAudio);
+
+function updateProgress(e) {
+  const { duration, currentTime } = e.srcElement;
+  const pct = duration ? (currentTime / duration) * 100 : 0;
+  progressFill.style.width = `${pct}%`;
+
+  currentTimeEl.textContent = formatTime(currentTime);
+  if (!isNaN(duration)) durationEl.textContent = formatTime(duration);
+}
+
+function seekAudio(e) {
+  const width   = this.clientWidth;
+  const clickX  = e.offsetX;
+  const { duration } = audio;
+  if (!duration) return;
+  audio.currentTime = (clickX / width) * duration;
+  if (!isPlaying) playAudio();
+}
+
+function formatTime(secs) {
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = Math.floor(secs % 60);
+  return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+/* ══════════════════════════════════════
+   Download
+══════════════════════════════════════ */
+downloadBtn.addEventListener("click", () => {
+  if (!currentAudioUrl) return;
+  const filename = `${titleEl.textContent} - ${artistEl.textContent}.mp3`;
+  downloadResource(currentAudioUrl, filename);
+});
+
+function downloadResource(url, filename) {
+  if (!filename) filename = url.split("/").pop();
+  fetch(url, {
+    headers: new Headers({ Origin: location.origin }),
+    mode: "cors",
+  })
+    .then((r) => r.blob())
+    .then((blob) => {
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.download = filename;
+      a.href = blobUrl;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    })
+    .catch((e) => console.error("Download error:", e));
+}
+
+/* ══════════════════════════════════════
+   Loading indicator
+══════════════════════════════════════ */
+function showLoading(active) {
+  loadingBar.classList.toggle("loading", active);
+}
+
+/* ══════════════════════════════════════
+   Init
+══════════════════════════════════════ */
+async function init() {
+  surahNumber = 1;
+  artistEl.textContent = reciterNames[reciterNumber];
+  showLoading(true);
+
+  try {
+    const response = await fetch(
+      `https://api.quran.com/api/v4/chapter_recitations/${reciterNumber}/1`
+    );
+    const data = await response.json();
+    currentAudioUrl = data.audio_file.audio_url;
+    audio.src = currentAudioUrl;
+  } catch (err) {
+    console.error("Failed to initialize:", err);
+  } finally {
+    showLoading(false);
+  }
+}
+
+window.addEventListener("load", init);
